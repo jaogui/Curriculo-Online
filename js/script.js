@@ -136,7 +136,9 @@ const useTypingEffect = (words, speed = 120, delay = 1000) => {
 // COMPONENTES
 // ===================================================================
 const AnimatedItem = ({ children, delay }) => (
-  <div className="fade-in-up" style={{ animationDelay: delay }}>{children}</div>
+  <div className="fade-in-up" style={{ animationDelay: delay }}>
+    {children}
+  </div>
 );
 
 const TimelineItem = ({ data }) => (
@@ -186,7 +188,9 @@ const HomePage = () => {
             <AnimatedItem delay="0.3s">
               <div className="about-me">
                 <div className="block-title">
-                  <h3>Quem <span>Sou?</span></h3>
+                  <h3>
+                    Quem <span>Sou?</span>
+                  </h3>
                 </div>
                 <p>{personalInfo.about}</p>
                 <a href={personalInfo.githubUrl} className="btn" target="_blank">
@@ -200,7 +204,7 @@ const HomePage = () => {
               <ul className="info-list">
                 {personalInfo.details.map((item, idx) => (
                   <li key={idx}>
-                    <span className="title">{item.title}</span>
+                    <span className="title">{item.title}:</span>{" "}
                     <span className="value">{item.value}</span>
                   </li>
                 ))}
@@ -216,14 +220,18 @@ const HomePage = () => {
 const ResumePage = () => (
   <div className="section-inner">
     <AnimatedItem delay="0.1s">
-      <div className="page-header"><h2>Currículo</h2></div>
+      <div className="page-header">
+        <h2>Currículo</h2>
+      </div>
     </AnimatedItem>
     <div className="page-content">
       <div className="row">
         <div className="col col-half">
           <AnimatedItem delay="0.2s">
             <div className="block">
-              <div className="block-title"><h3>Educação & Experiências</h3></div>
+              <div className="block-title">
+                <h3>Educação & Experiências</h3>
+              </div>
               <div className="timeline">
                 {resumeData.education.map((edu, i) => (
                   <TimelineItem key={i} data={edu} />
@@ -235,9 +243,13 @@ const ResumePage = () => (
         <div className="col col-half">
           <AnimatedItem delay="0.3s">
             <div className="block">
-              <div className="block-title"><h3>Hard <span>Skills</span></h3></div>
+              <div className="block-title">
+                <h3>
+                  Hard <span>Skills</span>
+                </h3>
+              </div>
               <div className="skills-tags">
-                {resumeData.hardSkills.map(skill => (
+                {resumeData.hardSkills.map((skill) => (
                   <span key={skill}>{skill}</span>
                 ))}
               </div>
@@ -245,10 +257,14 @@ const ResumePage = () => (
           </AnimatedItem>
           <AnimatedItem delay="0.4s">
             <div className="block">
-              <div className="block-title"><h3>Idiomas</h3></div>
+              <div className="block-title">
+                <h3>Idiomas</h3>
+              </div>
               <div className="skills-info">
                 {resumeData.languages.map((lang, i) => (
-                  <p key={i}><strong>{lang.lang}:</strong> {lang.level}</p>
+                  <p key={i}>
+                    <strong>{lang.lang}:</strong> {lang.level}
+                  </p>
                 ))}
               </div>
             </div>
@@ -260,7 +276,11 @@ const ResumePage = () => (
         <div className="col col-full">
           <AnimatedItem delay="0.5s">
             <div className="block">
-              <div className="block-title"><h3>Soft <span>Skills</span></h3></div>
+              <div className="block-title">
+                <h3>
+                  Soft <span>Skills</span>
+                </h3>
+              </div>
               <div className="row">
                 {resumeData.softSkills.map((skill, i) => (
                   <div className="col col-half soft-skill-card" key={i}>
@@ -281,15 +301,26 @@ const App = () => {
   const [page, setPage] = useState("home");
   const [exiting, setExiting] = useState(false);
 
-  const navigateTo = useCallback((p) => {
-    if (p !== page) {
-      setExiting(true);
-      setTimeout(() => {
-        setPage(p);
-        setExiting(false);
-      }, 300);
-    }
-  }, [page]);
+  useEffect(() => {
+    document.body.style.background = `
+      radial-gradient(circle at 20% 30%, rgba(225, 0, 255, 0.05) 0%, transparent 60%),
+      radial-gradient(circle at 80% 70%, rgba(127, 0, 255, 0.05) 0%, transparent 60%),
+      var(--bg-dark)
+    `;
+  }, []);
+
+  const navigateTo = useCallback(
+    (p) => {
+      if (p !== page) {
+        setExiting(true);
+        setTimeout(() => {
+          setPage(p);
+          setExiting(false);
+        }, 300);
+      }
+    },
+    [page]
+  );
 
   return (
     <div id="page" className="page">
@@ -299,8 +330,22 @@ const App = () => {
         </div>
         <nav className="site-nav">
           <ul className="site-main-menu">
-            <li><a className={page === "home" ? "active" : ""} onClick={() => navigateTo("home")}>Início</a></li>
-            <li><a className={page === "resume" ? "active" : ""} onClick={() => navigateTo("resume")}>Currículo</a></li>
+            <li>
+              <a
+                className={page === "home" ? "active" : ""}
+                onClick={() => navigateTo("home")}
+              >
+                Início
+              </a>
+            </li>
+            <li>
+              <a
+                className={page === "resume" ? "active" : ""}
+                onClick={() => navigateTo("resume")}
+              >
+                Currículo
+              </a>
+            </li>
           </ul>
         </nav>
       </header>
